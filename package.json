@@ -15,11 +15,13 @@
     "test": "npm run karma -- --single-run --log-level error",
     "karma": "karma start test/karma.config.js",
     "serve-examples": "webpack-dev-server --config examples/webpack/config.js --mode development --watch",
+    "build-distribution": "npm run build-package && rm -rf lib && npx babel build/ --out-dir lib && npm run copy-lib-css",
     "build-examples": "webpack --config examples/webpack/config.js --mode production",
     "build-package": "npm run transpile && npm run copy-css && node tasks/prepare-package && cp README.md build/ol",
     "build-index": "npm run build-package && node tasks/generate-index",
     "build-legacy": "rm -rf build && npm run build-index && webpack --config config/webpack-config-legacy-build.js && cleancss --source-map src/ol/ol.css -o build/legacy/ol.css",
     "copy-css": "cp src/ol/ol.css build/ol/ol.css",
+    "copy-lib-css": "cp src/ol/ol.css lib/ol/ol.css",
     "transpile": "rm -rf build/ol && mkdir -p build && buble --input src/ol --output build/ol --no modules --sourcemap",
     "typecheck": "tsc --pretty",
     "apidoc": "jsdoc config/jsdoc/api/index.md -c config/jsdoc/api/conf.json -P package.json -d build/apidoc"
@@ -34,11 +36,16 @@
     "url": "https://github.com/openlayers/openlayers/issues"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.0",
+    "core-js": "^2.6.5",
     "pbf": "3.1.0",
     "pixelworks": "1.1.0",
     "rbush": "2.0.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "@openlayers/eslint-plugin": "^4.0.0-beta.1",
     "@types/arcgis-rest-api": "^10.4.3",
     "@types/geojson": "^7946.0.4",
